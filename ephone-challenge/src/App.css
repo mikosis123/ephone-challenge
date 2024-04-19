@@ -6,6 +6,16 @@
   height: 40vmin;
   pointer-events: none;
 }
+.react-flow__node-mindmap {
+  background: white;
+  border-radius: 2px;
+  border: 1px solid black;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

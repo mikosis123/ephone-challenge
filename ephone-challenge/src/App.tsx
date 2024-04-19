@@ -7,12 +7,18 @@ import ReactFlow, {
   useEdgesState,
   addEdge,
   BackgroundVariant,
+  Edge,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import Sidebar from "./components/Sidebar";
 import CustomNode from "./components/CustomNode";
 
-const initialEdges: any = [];
+interface MenuItem {
+  id: string;
+  label: string;
+}
+
+const initialEdges: Edge[] = [];
 
 export default function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -23,25 +29,43 @@ export default function App() {
     [setEdges]
   );
 
-  // Define the custom node types here
   const nodeTypes = {
-    customNode: CustomNode, // Use the type identifier as a string key
+    customNode: CustomNode,
   };
 
-  // Helper function to create nodes from menu items
-  const createNodesFromMenuItems = (items: any) => {
-    return items.map((item: any, index: any) => ({
-      id: `node-${index}`,
-      type: "customNode", // Specify the custom node type here
-      position: { x: 150 * index, y: 25 }, // Adjust layout as needed
-      data: { label: item },
+  const createNodesFromMenuItems = (items: MenuItem[]) => {
+    return items.map((item, index) => ({
+      id: `node-${item.id}`,
+      type: "customNode",
+      position: { x: 150 * index, y: 25 },
+      data: { label: item.label },
     }));
   };
 
-  // This function is passed to the child component and used to update the state
-  const handleMenuItemsChange = (items: any) => {
+  // Type guard to check if a value is not null
+  const isNotNull = <T,>(value: T | null): value is T => value !== null;
+
+  const createEdgesFromNodes = (nodeList: any[]) => {
+    return nodeList
+      .map((node, index) => {
+        if (index < nodeList.length - 1) {
+          return {
+            id: `e${node.id}-${nodeList[index + 1].id}`,
+            source: node.id,
+            target: nodeList[index + 1].id,
+            animated: true,
+          };
+        }
+        return null;
+      })
+      .filter(isNotNull); // Use the type guard to filter out null values
+  };
+
+  const handleMenuItemsChange = (items: MenuItem[]) => {
     const newNodes = createNodesFromMenuItems(items);
-    setNodes(newNodes); // Update the nodes state with the new nodes
+    const newEdges = createEdgesFromNodes(newNodes);
+    setNodes(newNodes);
+    setEdges(newEdges);
   };
 
   return (
@@ -57,7 +81,7 @@ export default function App() {
         <ReactFlow
           nodes={nodes}
           edges={edges}
-          nodeTypes={nodeTypes} // Use the nodeTypes defined earlier
+          nodeTypes={nodeTypes}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}

@@ -19,7 +19,7 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
   };
 
   const extractMenuItems = () => {
-    const menuRegex = /^(\d+)\.\s+(.*)$/gm; // Updated regex to capture the number
+    const menuRegex = /^(\d+)\.\s+(.*)$/gm;
     let match: RegExpExecArray | null;
     const items: MenuItem[] = [];
 
@@ -31,9 +31,16 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
       setError("No valid menu items found");
     } else {
       setError("");
-      onMenuItemsChange(items);
       setMenuItems(items);
+      onMenuItemsChange(items); // Call the prop function with the new items list
     }
+    setInputText("");
+  };
+
+  const handleDeleteItem = (id: string) => {
+    const updatedMenuItems = menuItems.filter((item) => item.id !== id);
+    setMenuItems(updatedMenuItems);
+    onMenuItemsChange(updatedMenuItems); // Also update the parent component state
   };
 
   return (
@@ -48,9 +55,12 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
       <div>{error && <p style={{ color: "red" }}>{error}</p>}</div>
       {!error &&
         menuItems.map((item, index) => (
-          <p key={index}>
-            {item.id}: {item.label}
-          </p>
+          <div key={index}>
+            <p>
+              {item.id}: {item.label}
+            </p>
+            <button onClick={() => handleDeleteItem(item.id)}>Delete</button>
+          </div>
         ))}
     </div>
   );

@@ -60,6 +60,19 @@ export default function App() {
       })
       .filter(isNotNull); // Use the type guard to filter out null values
   };
+  const deleteNodeById = useCallback(
+    (nodeId: string) => {
+      setNodes((currentNodes) =>
+        currentNodes.filter((node) => node.id !== nodeId)
+      );
+      setEdges((currentEdges) =>
+        currentEdges.filter(
+          (edge) => edge.source !== nodeId && edge.target !== nodeId
+        )
+      );
+    },
+    [setNodes, setEdges]
+  );
 
   const handleMenuItemsChange = (items: MenuItem[]) => {
     const newNodes = createNodesFromMenuItems(items);
@@ -85,6 +98,7 @@ export default function App() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
+          // onClick={deleteNodeById}
         >
           <MiniMap />
           <Controls />

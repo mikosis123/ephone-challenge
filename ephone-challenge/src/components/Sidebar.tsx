@@ -13,6 +13,8 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
   const [inputText, setInputText] = useState<string>("");
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [error, setError] = useState<string>("");
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editText, setEditText] = useState<string>("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputText(event.target.value);
@@ -42,6 +44,23 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
     setMenuItems(updatedMenuItems);
     onMenuItemsChange(updatedMenuItems); // Also update the parent component state
   };
+  const handleEdit = (item: MenuItem) => {
+    setEditId(item.id);
+    setEditText(item.label);
+  };
+
+  const handleSaveEdit = () => {
+    const updatedMenuItems = menuItems.map((item) =>
+      item.id === editId ? { ...item, label: editText } : item
+    );
+    setMenuItems(updatedMenuItems);
+    onMenuItemsChange(updatedMenuItems); // Update the parent component
+    setEditId(null); // Clear edit mode
+  };
+
+  const handleEditChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditText(event.target.value);
+  };
 
   return (
     <div className="bg-blue-200 p-4">
@@ -56,10 +75,22 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
       {!error &&
         menuItems.map((item, index) => (
           <div key={index}>
-            <p>
-              {item.id}: {item.label}
-            </p>
-            <button onClick={() => handleDeleteItem(item.id)}>Delete</button>
+            {editId === item.id ? (
+              <div>
+                <input value={editText} onChange={handleEditChange} />
+                <button onClick={handleSaveEdit}>Save</button>
+              </div>
+            ) : (
+              <div>
+                <p>
+                  {item.id}: {item.label}
+                </p>
+                <button onClick={() => handleEdit(item)}>Edit</button>
+                <button onClick={() => handleDeleteItem(item.id)}>
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
         ))}
     </div>

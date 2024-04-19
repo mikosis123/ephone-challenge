@@ -8,6 +8,7 @@ import ReactFlow, {
   addEdge,
   BackgroundVariant,
   Edge,
+  Node,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import Sidebar from "./components/Sidebar";
@@ -17,18 +18,42 @@ interface MenuItem {
   id: string;
   label: string;
 }
+interface ExtendedNode extends Node {
+  position: {
+    x: number;
+    y: number;
+  };
+  data: {
+    label: string;
+  };
+}
 
 const initialEdges: Edge[] = [];
 
 export default function App() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
-
+  const [selectedNode, setSelectedNode] = useState<Node | null>(null);
+  const onNodeClick = useCallback((event: any, node: any) => {
+    setSelectedNode(node);
+  }, []);
   const onConnect = useCallback(
     (params: any) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
-
+  const duplicateNode = useCallback(() => {
+    if (selectedNode) {
+      const newNode = {
+        ...selectedNode,
+        id: `node-${Math.random().toString(36).substr(2, 9)}`,
+        position: {
+          x: selectedNode.position.x + 100, // slightly offset x for visibility
+          y: selectedNode.position.y + 10,
+        },
+      };
+      setNodes((nds: any) => [...nds, newNode]);
+    }
+  }, [selectedNode, setNodes]);
   const nodeTypes = {
     customNode: CustomNode,
   };
@@ -60,25 +85,28 @@ export default function App() {
       })
       .filter(isNotNull); // Use the type guard to filter out null values
   };
-  const deleteNodeById = useCallback(
-    (nodeId: string) => {
-      setNodes((currentNodes) =>
-        currentNodes.filter((node) => node.id !== nodeId)
-      );
-      setEdges((currentEdges) =>
-        currentEdges.filter(
-          (edge) => edge.source !== nodeId && edge.target !== nodeId
-        )
-      );
-    },
-    [setNodes, setEdges]
-  );
 
   const handleMenuItemsChange = (items: MenuItem[]) => {
     const newNodes = createNodesFromMenuItems(items);
     const newEdges = createEdgesFromNodes(newNodes);
     setNodes(newNodes);
     setEdges(newEdges);
+  };
+  const getRandomInt = (max: any) => Math.floor(Math.random() * max);
+
+  const createRandomNode = () => {
+    const id = `random-node-${getRandomInt(1000)}`; // Ensure unique ID
+    return {
+      id,
+      type: "customNode", // or 'default' if you don't need custom styling
+      position: { x: getRandomInt(800), y: getRandomInt(600) }, // Random position within some bounds
+      data: { label: `Node ${getRandomInt(100)}` },
+    };
+  };
+
+  const addRandomNode = () => {
+    const newNode = createRandomNode();
+    setNodes((nds) => [...nds, newNode]);
   };
 
   return (
@@ -91,6 +119,12 @@ export default function App() {
         className="p-4 border border-dark"
         style={{ width: "70vw", height: "100vh" }}
       >
+        <button onClick={addRandomNode} style={{ marginBottom: "10px" }}>
+          Add Random Node
+        </button>
+        <button onClick={duplicateNode} style={{ marginBottom: "10px" }}>
+          duplicate node
+        </button>
         <ReactFlow
           nodes={nodes}
           edges={edges}
@@ -98,7 +132,7 @@ export default function App() {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onConnect={onConnect}
-          // onClick={deleteNodeById}
+          onNodeClick={onNodeClick}
         >
           <MiniMap />
           <Controls />

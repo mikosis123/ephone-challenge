@@ -11,10 +11,10 @@ This project, developed for the EPphone Company challenge, utilizes ReactFlow to
 - **Global Label Update**: Facilitates the updating of all node labels simultaneously.
 - **Alert System**: Alerts users to select a node when attempting to duplicate without a selection.
 ## Technologies used
-- **React.js
-- **ReactFlow
-- **Material UI
-- **Tailwind Css
+- **React.js**
+- **ReactFlow**
+- **Material UI**
+- **Tailwind Css**
 
 ## Installation
 

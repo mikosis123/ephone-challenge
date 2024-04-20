@@ -1,4 +1,10 @@
 import React, { useState } from "react";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SaveAsIcon from "@mui/icons-material/SaveAs";
+import { Input } from "@mui/base/Input";
+import { TextareaAutosize } from "@mui/base/TextareaAutosize";
+import { Button } from "@mui/material";
 
 interface MenuItem {
   id: string;
@@ -63,32 +69,48 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
   };
 
   return (
-    <div className="bg-blue-200 p-4">
-      <textarea
+    <div className="bg-blue-200 p-4 w-1/4 flex flex-col">
+      <TextareaAutosize
+        aria-label="minimum height"
+        minRows={3}
+        placeholder="1. menu item "
         value={inputText}
         onChange={handleInputChange}
-        placeholder="Paste your text here..."
-        style={{ width: "100%", height: "150px", marginBottom: "10px" }}
+        className="w-full mb-4 border border-[#3730a3] rounded-md p-2"
       />
-      <button onClick={extractMenuItems}>Extract</button>
+      <Button variant="contained" onClick={extractMenuItems}>
+        Extract
+      </Button>
+      <h3 className="mt-4 font-bold text-xl">Menu Items</h3>
       <div>{error && <p style={{ color: "red" }}>{error}</p>}</div>
       {!error &&
         menuItems.map((item, index) => (
           <div key={index}>
             {editId === item.id ? (
-              <div>
-                <input value={editText} onChange={handleEditChange} />
-                <button onClick={handleSaveEdit}>Save</button>
+              <div className="flex gap-4">
+                <input
+                  className="border border-[#3730a3] rounded-md p-2"
+                  value={editText}
+                  onChange={handleEditChange}
+                />
+
+                <button onClick={handleSaveEdit}>
+                  <SaveAsIcon className="text-[#3730a3]" />
+                </button>
               </div>
             ) : (
-              <div>
-                <p>
-                  {item.id}: {item.label}
+              <div className="flex gap-14 mt-4 justify-between">
+                <p className="text-lg wrap text-[#3730a3]">
+                  {item.id}. {item.label}
                 </p>
-                <button onClick={() => handleEdit(item)}>Edit</button>
-                <button onClick={() => handleDeleteItem(item.id)}>
-                  Delete
-                </button>
+                <div className="flex gap-2">
+                  <button onClick={() => handleEdit(item)}>
+                    <ModeEditIcon className="text-[#3730a3]" />
+                  </button>
+                  <button onClick={() => handleDeleteItem(item.id)}>
+                    <DeleteIcon className="text-[#dc2626]" />
+                  </button>
+                </div>
               </div>
             )}
           </div>

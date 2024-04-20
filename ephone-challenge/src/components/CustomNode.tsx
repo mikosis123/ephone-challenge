@@ -14,13 +14,13 @@ const CustomNode = ({ data }: any) => {
       <Handle
         type="target"
         position={Position.Top}
-        style={{ borderRadius: "4px" }}
+        style={{ borderRadius: "4px", borderColor: "#3730a3" }}
       />
       <div
         style={{
           textAlign: "center",
           fontWeight: "bold",
-          color: "#333",
+          color: "#3730a3",
           fontSize: "14px",
           marginBottom: "5px",
         }}

@@ -70,6 +70,8 @@ export default function App() {
         },
       };
       setNodes((nds) => [...nds, newNode]);
+    } else {
+      alert("Please select a node point  to duplicate and edit.");
     }
   }, [selectedNode, setNodes]);
 

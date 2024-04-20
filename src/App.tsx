@@ -173,14 +173,11 @@ export default function App() {
       <Nav />
       <div
         className="flex justify-content-between align-items-center bg-light"
-        style={{ width: "100vw", height: "100vh" }}
+        style={{ width: "100vw" }}
       >
         <Sidebar onMenuItemsChange={handleMenuItemsChange} />
-        <div
-          className="p-2 border border-dark"
-          style={{ width: "100vw", height: "80vh" }}
-        >
-          <div className="flex gap-4">
+        <div className="p " style={{ width: "100vw", height: "80vh" }}>
+          <div className="flex gap-4 pt-4 pl-4">
             <Button
               className="mr-8"
               onClick={addRandomNode}
@@ -207,7 +204,7 @@ export default function App() {
                     color="primary"
                     variant="contained"
                   >
-                    Save
+                    Edit
                   </Button>
                 </div>
               )}

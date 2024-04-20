@@ -69,16 +69,20 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
   };
 
   return (
-    <div className="bg-blue-200 p-4 w-1/4 flex flex-col">
+    <div className="bg-gray-200 h-[90vh] p-4 w-1/4  flex flex-col">
       <TextareaAutosize
         aria-label="minimum height"
         minRows={3}
-        placeholder="1. menu item "
+        placeholder="(menu format) = 1. menu item "
         value={inputText}
         onChange={handleInputChange}
         className="w-full mb-4 border border-[#3730a3] rounded-md p-2"
       />
-      <Button variant="contained" onClick={extractMenuItems}>
+      <Button
+        variant="contained"
+        className="shadow-lg"
+        onClick={extractMenuItems}
+      >
         Extract
       </Button>
       <h3 className="mt-4 font-bold text-xl">Menu Items</h3>
@@ -99,7 +103,7 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
                 </button>
               </div>
             ) : (
-              <div className="flex gap-14 mt-4 justify-between">
+              <div className="flex bg-gray-100 p-2 gap-14 mt-4 justify-between">
                 <p className="text-lg wrap text-[#3730a3]">
                   {item.id}. {item.label}
                 </p>

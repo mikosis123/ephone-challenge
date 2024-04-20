@@ -10,6 +10,11 @@ This project, developed for the EPphone Company challenge, utilizes ReactFlow to
 - **Automatic Edge Connection**: Edges are automatically created between nodes as they are added to visualize menu flow.
 - **Global Label Update**: Facilitates the updating of all node labels simultaneously.
 - **Alert System**: Alerts users to select a node when attempting to duplicate without a selection.
+## Technologies used
+- **React.js
+- **ReactFlow
+- **Material UI
+- **Tailwind Css
 
 ## Installation
 

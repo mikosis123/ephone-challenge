@@ -69,7 +69,7 @@ const Sidebar: React.FC<MenuExtractorProps> = ({ onMenuItemsChange }) => {
   };
 
   return (
-    <div className="bg-gray-200 h-[90vh] p-4 w-1/4  flex flex-col">
+    <div className="bg-gray-300 h-[90vh] p-4 w-1/4  flex flex-col">
       <TextareaAutosize
         aria-label="minimum height"
         minRows={3}
